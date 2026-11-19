@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-ink: #070A14;
+  --color-panel: #10162B;
+  --color-line: #262F52;
+  --color-cream: #F4F1E8;
+  --color-mist: #A9AFC4;
+  --color-teal: #5FB3B3;
+  --color-gold: #F2B544;
+  --color-ember: #D9893B;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Rotating conic border ("border beam") */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.beam {
+  background:
+    linear-gradient(var(--color-gold), var(--color-gold)) padding-box,
+    conic-gradient(from var(--beam-angle), transparent 0deg, #FFF3C4 40deg, transparent 90deg, transparent 360deg) border-box;
+  border: 1.5px solid transparent;
+  animation: beam-spin 4s linear infinite;
+}
+@keyframes beam-spin { to { --beam-angle: 360deg; } }
+
+/* Shimmer sweep */
+.shimmer::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shimmer 3.2s ease-in-out infinite 1.4s;
+  pointer-events: none;
+}
+@keyframes shimmer { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(120%); } }
+
+/* Gradient text sweep */
+.shine-text {
+  background: linear-gradient(90deg, #CFCBBF 0%, #CFCBBF 40%, #FFE6A6 50%, #CFCBBF 60%, #CFCBBF 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shine 5s linear infinite;
+}
+@keyframes shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
+
+/* Film grain */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+a:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .beam, .shimmer::after, .shine-text { animation: none; }
+}
